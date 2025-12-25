@@ -1,5 +1,5 @@
 # Btrfs Snapshot Management Tool
-An automated Btrfs file system snapshot management tool implemented with Bash scripts. It supports manual/hourly/boot-time snapshot creation, interactive snapshot restoration, and enables automatic boot-time and hourly scheduled snapshots via systemd.
+btrfs_snap.sh is An automated Btrfs file system snapshot management tool implemented with Bash scripts. It supports manual/hourly/boot-time snapshot creation, interactive snapshot restoration, and enables automatic boot-time and hourly scheduled snapshots via systemd.
 
 ## Features
 - 📸 **Multiple Snapshot Types**: Supports four snapshot types: manual, hourly, boot-time, and rollback backup
@@ -115,7 +115,7 @@ sudo ./btrfs_snap.sh --help
 ```
 
 ### 4. Automated Deployment (Recommended)
-Use `btrfs_snap_service.sh` for one-click installation of systemd services to achieve:
+Use `btrfs_snap.sh` for one-click installation of systemd services to achieve:
 - Automatic creation of boot-type snapshots on system startup
 - Automatic creation of hourly-type snapshots every hour
 
@@ -123,14 +123,14 @@ Use `btrfs_snap_service.sh` for one-click installation of systemd services to ac
 # Enter script directory
 cd /usr/local/bin/btrfs-snap
 
-# Install service (first modify DISK_PATH in the script to your disk path)
-sudo ./btrfs_snap_service.sh --install
+# Install service
+sudo ./btrfs_snap.sh --install
 
 # View service status
-sudo ./btrfs_snap_service.sh --status
+sudo ./btrfs_snap.sh --status
 
 # Uninstall service
-sudo ./btrfs_snap_service.sh --uninstall
+sudo ./btrfs_snap.sh --uninstall
 ```
 
 ## Core Configuration Description
@@ -209,6 +209,6 @@ This script is for learning and personal use only and has no official license. P
 ---
 
 ### Summary
-1. This tool includes 4 core scripts that implement the full lifecycle of Btrfs snapshot creation, restoration, and automated deployment. The core is the `btrfs_snap.sh` main script, which uniformly calls the create/restore sub-scripts.
+1. This tool includes 5 core scripts that implement the full lifecycle of Btrfs snapshot creation, restoration, and automated deployment. The core is the `btrfs_snap.sh` main script, which uniformly calls the create/restore sub-scripts.
 2. It supports three active snapshot types: manual, hourly, and boot-time. A backup snapshot is automatically created during restoration, and old data of hourly/boot-time snapshots can be cleaned up automatically.
-3. Systemd services can be deployed with one click via `btrfs_snap_service.sh` to implement automatic boot-time snapshots and hourly scheduled snapshots, reducing manual operation costs.
+3. Systemd services can be deployed with just one click to achieve automatic boot-time snapshots and hourly scheduled snapshots, reducing manual operation costs.

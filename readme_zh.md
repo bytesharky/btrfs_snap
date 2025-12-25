@@ -1,6 +1,6 @@
 # Btrfs 快照管理工具
 
-一个基于 Bash 脚本实现的 Btrfs 文件系统快照自动化管理工具，支持手动/小时/开机快照创建、交互式快照恢复，并可通过 systemd 实现开机自动快照和每小时定时快照。
+btrfs_snap.sh 是一个基于 Bash 脚本实现的 Btrfs 文件系统快照自动化管理工具，支持手动/小时/开机快照创建、交互式快照恢复，并可通过 systemd 实现开机自动快照和每小时定时快照。
 
 ## 功能特性
 - 📸 **多类型快照**：支持手动、小时、开机、回滚备份四种快照类型
@@ -116,7 +116,7 @@ sudo ./btrfs_snap.sh --help
 ```
 
 ### 4. 自动化部署（推荐）
-通过 `btrfs_snap_service.sh` 一键安装 systemd 服务，实现：
+通过 `btrfs_snap.sh` 一键安装 systemd 服务，实现：
 - 开机自动创建 boot 类型快照
 - 每小时自动创建 hourly 类型快照
 
@@ -124,14 +124,14 @@ sudo ./btrfs_snap.sh --help
 # 进入脚本目录
 cd /usr/local/bin/btrfs-snap
 
-# 安装服务（需先修改脚本内的 DISK_PATH 为你的磁盘路径）
-sudo ./btrfs_snap_service.sh --install
+# 安装服务
+sudo ./btrfs_snap.sh --install
 
 # 查看服务状态
-sudo ./btrfs_snap_service.sh --status
+sudo ./btrfs_snap.sh --status
 
 # 卸载服务
-sudo ./btrfs_snap_service.sh --uninstall
+sudo ./btrfs_snap.sh --uninstall
 ```
 
 ## 核心配置说明
@@ -210,6 +210,6 @@ sudo journalctl -u btrfs-snap-hourly.service -f
 ---
 
 ### 总结
-1. 该工具包含4个核心脚本，实现了Btrfs快照的创建、恢复、自动化部署全流程，核心是`btrfs_snap.sh`主脚本，统一调用创建/恢复子脚本。
+1. 该工具包含5个核心脚本，实现了Btrfs快照的创建、恢复、自动化部署全流程，核心是`btrfs_snap.sh`主脚本，统一调用创建/恢复子脚本。
 2. 支持手动/小时/开机三种主动快照类型，恢复时会自动创建备份快照，且小时/开机快照可自动清理旧数据。
-3. 可通过`btrfs_snap_service.sh`一键部署systemd服务，实现开机自动快照和每小时定时快照，降低手动操作成本。
+3. 可通过一键部署systemd服务，实现开机自动快照和每小时定时快照，降低手动操作成本。
