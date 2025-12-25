@@ -48,7 +48,7 @@ ProtectSystem=strict
 ProtectHome=read-only
 ReadWritePaths=/var/log
 ReadWritePaths=/var/log/btrfs_snap
-ReadWritePaths=/run/snapshots
+ReadWritePaths=/run
 
 [Install]
 WantedBy=multi-user.target
@@ -73,7 +73,7 @@ ProtectSystem=strict
 ProtectHome=read-only
 ReadWritePaths=/var/log
 ReadWritePaths=/var/log/btrfs_snap
-ReadWritePaths=/run/snapshots
+ReadWritePaths=/run
 
 [Install]
 WantedBy=multi-user.target
@@ -217,7 +217,8 @@ uninstall_service() {
 }
 
 # 主逻辑
-case "$1" in
+ACTION=${1:-}
+case $ACTION in
     -i|--install)
         install_service
         ;;
