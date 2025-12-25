@@ -89,6 +89,8 @@ Description=每小时执行一次 Btrfs 快照任务
 OnCalendar=hourly
 # 随机延迟 0-60 秒，避免整点资源抢占
 RandomizedDelaySec=60
+# 错过执行时间不补
+Persistent=false
 # 绑定正确的定时服务实例
 Unit=${HOURLY_SERVICE_INSTANCE}
 
