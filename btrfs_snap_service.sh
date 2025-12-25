@@ -2,7 +2,7 @@
 # 增强健壮性：-e(错误退出) -u(未定义变量退出) -o pipefail(管道失败传递)
 set -euo pipefail
 # 版本号
-VERSION=1.0.0
+VERSION=1.0.1
 # 获取脚本自身的绝对路径（处理软链接）
 SCRIPT_PATH=$(readlink -f "$0")
 # 从绝对路径中提取目录部分

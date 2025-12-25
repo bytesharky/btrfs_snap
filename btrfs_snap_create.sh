@@ -2,7 +2,7 @@
 # 增强健壮性：-e(错误退出) -u(未定义变量退出) -o pipefail(管道失败传递)
 set -euo pipefail
 # 版本号
-VERSION=1.0.0
+VERSION=1.0.1
 # ==================== 可配置变量（建议在主脚本修改）====================
 # 目标磁盘
 TARGET_DISK="${TARGET_DISK:-/dev/nvme0n1p2}"
