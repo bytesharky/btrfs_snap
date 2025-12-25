@@ -26,7 +26,7 @@ SCRIPT_PATH="$SCRIPT_DIR/btrfs_snap.sh"
 # 日志文件路径
 LOG_FILE="/var/log/btrfs_snap.log"
 # 目标磁盘路径
-DISK_PATH="/dev/nvme0n1p2"
+TARGET_DISK="${TARGET_DISK:-/dev/nvme0n1p2}"
 # =======================================================================
 
 # 定义服务模板内容
@@ -34,7 +34,7 @@ BOOT_SERVICE_TEMPLATE=$(cat <<EOF
 [Unit]
 Description=Btrfs boot 快照服务 
 After=multi-user.target local-fs.target
-ConditionPathExists=${DISK_PATH}
+ConditionPathExists=${TARGET_DISK}
 
 [Service]
 Type=oneshot
@@ -59,7 +59,7 @@ HOURLY_SERVICE_TEMPLATE=$(cat <<EOF
 [Unit]
 Description=Btrfs hourly 快照服务 
 After=multi-user.target local-fs.target
-ConditionPathExists=${DISK_PATH}
+ConditionPathExists=${TARGET_DISK}
 
 [Service]
 Type=oneshot
@@ -101,19 +101,21 @@ EOF
 
 # 显示帮助信息
 show_help() {
-    echo "用法: $0 [COMMAND]"
-    echo "管理 Btrfs 快照服务及每小时定时任务"
-    echo ""
-    echo "命令:"
-    echo "  -i, --install    安装服务+定时任务并启用"
-    echo "  -r, --uninstall  停止并卸载服务+定时任务"
-    echo "      --status     查看快照服务及定时任务状态"
-    echo "  -h, --help       显示此帮助信息"
-    echo ""
-    echo "示例:"
-    echo "  $0 --install   # 安装服务和定时任务"
-    echo "  $0 --uninstall # 卸载服务和定时任务"
-    echo "  $0 --status    # 查看运行状态"
+    cat << EOF
+用法: $0 [COMMAND]
+管理 Btrfs 快照服务及每小时定时任务
+
+命令:
+  -i, --install    安装服务+定时任务并启用
+  -r, --uninstall  停止并卸载服务+定时任务
+      --status     查看快照服务及定时任务状态
+  -h, --help       显示此帮助信息
+
+示例:
+  $0 --install   # 安装服务和定时任务
+  $0 --uninstall # 卸载服务和定时任务
+  $0 --status    # 查看运行状态
+EOF
 }
 
 # 检查是否为 root 用户

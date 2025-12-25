@@ -24,6 +24,8 @@ export CREATE_SNAP_SCRIPT="$SCRIPT_DIR/btrfs_snap_create.sh"
 export RESTORE_SNAP_SCRIPT="$SCRIPT_DIR/btrfs_snap_restore.sh"
 # 删除快照脚本
 export DELETE_SNAP_SCRIPT="$SCRIPT_DIR/btrfs_snap_delete.sh"
+# 服务管理脚本
+export SERVICE_SNAP_SCRIPT="$SCRIPT_DIR/btrfs_snap_service.sh"
 
 # 拼接最终日志文件路径
 LOG_FILE="${SNAPSHOT_LOG_PATH}/btrfs_snap.log"
@@ -68,10 +70,13 @@ show_help() {
 用法: $0 [选项] [快照参数]
 
 选项：
-  -c, --create   调用创建快照脚本，执行快照创建操作
-  -r, --restore  调用恢复快照脚本，执行快照回滚操作
-  -d, --delete   调用删除快照脚本，执行快照删除操作
-  -h, --help     显示此帮助信息
+  -c, --create     调用创建快照脚本，执行快照创建操作
+  -r, --restore    调用恢复快照脚本，执行快照回滚操作
+  -d, --delete     调用删除快照脚本，执行快照删除操作
+  -h, --help       显示此帮助信息
+      --install    安装服务+定时任务并启用
+      --uninstall  停止并卸载服务+定时任务 
+      --status     查看快照服务及定时任务状态
 
 示例：
   $0 --create manual         # 创建手动快照
@@ -80,7 +85,11 @@ show_help() {
   $0 --delete                # 交互式删除指定快照批次
 
 注意：
-  1. 需确保子脚本 ${CREATE_SNAP_SCRIPT} 和 ${RESTORE_SNAP_SCRIPT} 存在且可执行
+  1. 需确保子脚本，存在且可执行
+    ${CREATE_SNAP_SCRIPT}
+    ${RESTORE_SNAP_SCRIPT}
+    ${DELETE_SNAP_SCRIPT}
+    ${SERVICE_SNAP_SCRIPT}
   2. 日志文件路径：${LOG_FILE}
 EOF
 }
@@ -146,6 +155,21 @@ case "${ACTION}" in
             exit 1
         fi
         log "删除快照操作执行完成"
+        ;;
+    --install|--uninstall|--status)
+        # 管理服务
+        log "开始执行服务管理操作"
+        # 检查管理服务脚本是否存在且可执行
+        if [ ! -f "${SERVICE_SNAP_SCRIPT}" ] || [ ! -x "${SERVICE_SNAP_SCRIPT}" ]; then
+            log "错误：服务管理脚本 ${SERVICE_SNAP_SCRIPT} 不存在或不可执行！"
+            exit 1
+        fi
+        # 调用管理服务脚本，传递后续参数
+        if ! bash "${SERVICE_SNAP_SCRIPT}" "${@:1}"; then
+            log "错误：服务管理脚本执行失败！终止操作"
+            exit 1
+        fi
+        log "服务管理操作执行完成"
         ;;
     -h|--help|*)
         # 输出帮助
